@@ -1,0 +1,38 @@
+{extend name="base/base" /}
+{block name="body"}
+<article class="page-container">
+	<form class="form form-horizontal" id="admin" method="post" enctype="multipart/form-data"  >
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red"></span>权限组名称:</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="" name="adminname" id='name'>
+			</div>
+		</div>
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+				<input  class="btn btn-primary radius" type="button" value='确认添加' onclick="groupadd()">
+				<input class="btn btn-default radius" type="reset" value="取消">
+			</div>
+		</div>
+	</form>
+</article>
+{/block}
+{block name="js"}
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__ADMIN__lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="__ADMIN__lib/jquery.validation/1.14.0/jquery.validate.js"></script> 
+<script type="text/javascript" src="__ADMIN__lib/jquery.validation/1.14.0/validate-methods.js"></script> 
+<script type="text/javascript" src="__ADMIN__lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript" src="__ADMIN__lib/webuploader/0.1.5/webuploader.min.js"></script> 
+
+<script type="text/javascript">
+function groupadd()
+{
+	var name = $('#name').val();
+	if(!name) {layer.msg('名称不能为空'); return false;}
+	
+	sendAjax("{:url('admin/role/groupadddo')}","{:url('admin/role/rolegroup')}",{"name":name});
+}	
+</script>
+{/block}

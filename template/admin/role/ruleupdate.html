@@ -1,0 +1,96 @@
+{extend name="base/base" /}
+{block name="body"}
+<article class="page-container">
+	<form class="form form-horizontal" id="admin" method="post" enctype="multipart/form-data"  >
+		<input type="hidden" value="{$id}" id="id">
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red"></span>名称:</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$list.rule_title}" placeholder="" name="title" id='title'>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red"></span>URL:</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$list.rule_url}" placeholder="一级目录URL必须为空" name="name" id='name'  >
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red"></span>ICON:</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$list.rule_icon}" placeholder="" name="icon" id='icon'>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red"></span>排序:</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="{$list.rule_sort}" placeholder="" name="sort" id='sort'>
+			</div>
+		</div>
+		
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red"></span>是否显示在目录:</label>
+			<div class="formControls col-xs-8 col-sm-9 skin-minimal" id="radio">
+				<div class="radio-box">
+					<input name="show" type="radio"  value="1" <?= $list['rule_isshow'] == 0 ? "" : 'checked' ;?> >
+					<label for="sex-1">是</label>
+				</div>
+				<div class="radio-box">
+					<input type="radio"  name="show" value="0" <?= $list['rule_isshow'] == 1 ? "" : 'checked' ;?>>
+					<label for="sex-2">否</label>
+				</div>
+				
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red"></span>PID:</label>
+			<div class="formControls col-xs-8 col-sm-9"> <span class="select-box">
+				<select name="articlecolumn" class="select" id="selected">
+					<option value="0" <?= $list['rule_pid'] == 0 ? 'selected' : '' ; ?> >根目录</option>
+					{volist name="selected" id="item"}
+						<option value="{$item.rule_id}" <?= $list['rule_pid'] == $item['rule_id'] ? 'selected' : '' ; ?>>{$item.rule_title}</option>
+					{/volist}
+				</select>
+				</span> </div>
+		</div>
+
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+				<input  class="btn btn-primary radius" type="button" value='确认' onclick="ruleupdate()">
+				<input class="btn btn-default radius" type="reset" value="取消">
+			</div>
+		</div>
+	</form>
+</article>
+{/block}
+{block name="js"}
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__ADMIN__lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="__ADMIN__lib/jquery.validation/1.14.0/jquery.validate.js"></script> 
+<script type="text/javascript" src="__ADMIN__lib/jquery.validation/1.14.0/validate-methods.js"></script> 
+<script type="text/javascript" src="__ADMIN__lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript" src="__ADMIN__lib/webuploader/0.1.5/webuploader.min.js"></script> 
+
+<script type="text/javascript">
+function ruleupdate()
+{
+	var title = $('#title').val();
+	var name = $('#name').val();
+	var icon = $('#icon').val();
+	var sort = $('#sort').val();
+	var is_show = $("input[name='show']:checked").val();
+	var pid = $('#selected option:selected').val();
+	var id = $('#id').val();
+
+	if(!id) {layer.msg('未知数据'); return false;}
+	if(!title) {layer.msg('名称不能为空'); return false;}
+	if(name && pid == 0) {layer.msg('一级目录不能有URL'); return false;}
+	if(!icon && pid == 0) {layer.msg('一级目录必须有ICON'); return false;}
+	if(!name && pid != 0) {layer.msg('非一级目录必须有URL'); return false;}
+	
+	sendAjax("{:url('admin/role/ruleupdatedo')}","{:url('admin/role/rolerule')}",{"id":id,"name":name,"title":title,"icon":icon,"sort":sort,"is_show":is_show,"pid":pid});
+}	
+</script>
+{/block}

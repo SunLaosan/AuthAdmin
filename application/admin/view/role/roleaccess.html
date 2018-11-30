@@ -1,0 +1,50 @@
+﻿{extend name="base/base" /}
+{block name="body"}
+	
+	<div class="mt-20">
+		<table class="table table-border table-bordered table-bg table-hover table-sort">
+			<thead>
+				<tr class="text-c">
+					
+					<th width="5%">ID</th>
+					<th width="10%">姓名</th>
+					<th width="10%">创建时间</th>
+					<th width="5%">操作</th>
+
+				</tr>
+			</thead>
+			<tbody>
+				{volist name="list" id="item"}
+				<tr class="text-c">
+
+					
+					<td>{$item.admin_id}</td>
+					
+					<td>{$item.admin_name}</td>
+					<td>{$item.admin_ctime}</td>
+					<td class="f-14 td-manage">
+						<a class="ml-5" data-title="分配" style="text-decoration:none" href="{:url('admin/role/accessupdate',['id'=>$item.admin_id,'name'=>$item.admin_name])}" title="分配权限" ><i class="Hui-iconfont">&#xe6df;</i></a>
+						
+					</td>
+					
+					
+				</tr>
+				{/volist}
+				
+			</tbody>
+			
+		</table>
+		<div >{$list->render()}</div>
+	</div>
+</div>
+{/block}
+{block name="js"}
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__ADMIN__lib/My97DatePicker/4.8/WdatePicker.js"></script> 
+<script type="text/javascript" src="__ADMIN__lib/datatables/1.10.0/jquery.dataTables.min.js"></script> 
+<script type="text/javascript" src="__ADMIN__lib/laypage/1.2/laypage.js"></script>
+
+
+{/block}
+</body>
+</html>

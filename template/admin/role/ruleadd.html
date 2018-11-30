@@ -1,0 +1,94 @@
+{extend name="base/base" /}
+{block name="body"}
+<article class="page-container">
+	<form class="form form-horizontal" id="admin" method="post" enctype="multipart/form-data"  >
+	
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red"></span>名称:</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="" name="title" id='title'>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red"></span>URL:</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="一级目录URL必须为空" name="name" id='name'  >
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red"></span>ICON:</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="" name="icon" id='icon'>
+			</div>
+		</div>
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red"></span>排序:</label>
+			<div class="formControls col-xs-8 col-sm-9">
+				<input type="text" class="input-text" value="" placeholder="不同级别目录可分开排序" name="sort" id='sort'>
+			</div>
+		</div>
+		
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red"></span>是否显示在目录:</label>
+			<div class="formControls col-xs-8 col-sm-9 skin-minimal" id="radio">
+				<div class="radio-box">
+					<input name="show" type="radio"  value="1" checked >
+					<label for="sex-1">是</label>
+				</div>
+				<div class="radio-box">
+					<input type="radio"  name="show" value="0" >
+					<label for="sex-2">否</label>
+				</div>
+				
+			</div>
+		</div>
+
+		<div class="row cl">
+			<label class="form-label col-xs-4 col-sm-2"><span class="c-red"></span>PID:</label>
+			<div class="formControls col-xs-8 col-sm-9"> <span class="select-box">
+				<select name="articlecolumn" class="select" id="selected">
+					<option value="0" selected>根目录</option>
+					{volist name="selected" id="item"}
+						<option value="{$item.id}">{$item.title}</option>
+					{/volist}
+				</select>
+				</span> </div>
+		</div>
+
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+				<input  class="btn btn-primary radius" type="button" value='确认' onclick="ruleadd()">
+				<input class="btn btn-default radius" type="reset" value="取消">
+			</div>
+		</div>
+	</form>
+</article>
+{/block}
+{block name="js"}
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__ADMIN__lib/My97DatePicker/4.8/WdatePicker.js"></script>
+<script type="text/javascript" src="__ADMIN__lib/jquery.validation/1.14.0/jquery.validate.js"></script> 
+<script type="text/javascript" src="__ADMIN__lib/jquery.validation/1.14.0/validate-methods.js"></script> 
+<script type="text/javascript" src="__ADMIN__lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript" src="__ADMIN__lib/webuploader/0.1.5/webuploader.min.js"></script> 
+
+<script type="text/javascript">
+function ruleadd()
+{
+	var title = $('#title').val();
+	var name = $('#name').val();
+	var icon = $('#icon').val();
+	var sort = $('#sort').val();
+	var is_show = $("input[name='show']:checked").val();
+	var pid = $('#selected option:selected').val();
+
+	if(!title) {layer.msg('名称不能为空'); return false;}
+	if(name && pid == 0) {layer.msg('一级目录不能有URL'); return false;}
+	if(!icon && pid == 0) {layer.msg('一级目录必须有ICON'); return false;}
+	if(!name && pid != 0) {layer.msg('非一级目录必须有URL'); return false;}
+	
+	sendAjax("{:url('admin/role/ruleadddo')}","{:url('admin/role/rolerule')}",{"name":name,"title":title,"icon":icon,"sort":sort,"is_show":is_show,"pid":pid});
+}	
+</script>
+{/block}

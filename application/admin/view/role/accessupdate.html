@@ -1,0 +1,72 @@
+﻿{extend name="base/base" /}
+{block name="body"}
+	<div class="mt-20">
+		<input type="hidden" value={$id} id="admin_id">
+		<table class="table table-border table-bordered table-bg table-hover table-sort">
+			<thead>
+				<tr class="text-c">
+					<th width="10%">当前用户:</th>
+					<th width="20%">{$name}</th>
+				</tr>
+				<tr  class="text-c">
+					<th width="10%">选择</th>
+					<th width="20%">权限组</th>
+				</tr>
+			</thead>
+			<tbody>
+				
+				{volist name="list" id="item"}
+				<tr class="text-l">
+					<td><input type="checkbox" class="input-checkbox" value="{$item.group_id}" placeholder="" name="rules" <?= in_array($item['group_id'],$r) ? 'checked' : '' ;?>></td>
+					<td>
+						{$item.group_title}
+					</td>
+					
+				</tr>
+				{/volist}
+				
+			</tbody>
+			
+		</table>
+		
+	</div>
+
+
+		<div class="row cl">
+			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+				<input  class="btn btn-primary radius" type="button" value='确认' onclick="accessupdate()">
+				<input class="btn btn-default radius" type="reset" value="取消">
+			</div>
+	
+</div>
+{/block}
+{block name="js"}
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__ADMIN__lib/My97DatePicker/4.8/WdatePicker.js"></script> 
+<script type="text/javascript" src="__ADMIN__lib/datatables/1.10.0/jquery.dataTables.min.js"></script> 
+<script type="text/javascript" src="__ADMIN__lib/laypage/1.2/laypage.js"></script>
+<script>
+
+	function accessupdate()
+	{
+		var cks=$("[name='rules']");  
+        var str='';  //拼接id  
+        for (var i=0; i<cks.length; i++) {  
+
+            if (cks[i].checked) {  
+
+                if (cks[i].value!=0) {
+
+                    str += cks[i].value + ","; 
+                }
+            }  
+         }  //去掉字符串末尾的‘,'  
+
+         str = str.substring(0, str.length-1); 
+
+         var id = $('#admin_id').val();
+         sendAjax("{:url('admin/role/accessupdatedo')}","{:url('admin/role/roleaccess')}",{"ids":str,"id":id});
+	}
+</script>
+
+{/block}
